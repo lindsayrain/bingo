@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+	<title>Bingo Number Pick Machine 104</title>
+	<!--script src="http://code.jquery.com/jquery-1.7.1.min.js"></script-->	
+	<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
+	<!--<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>-->	
+	<script src="jquery-1.8.3.js"></script>
+	<script src="jquery-ui-1.9.2.custom.min.js"></script>
+</head>
+<!--
+Created By Lindsay Hsieh 謝小雨 @ 20120102
+lindsayrain @ gmail.com
+-->
+<style type="text/css">
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {margin: 2px;padding: 2px;}
+ul, li{list-style:none; display:inline-block;}
+
+.ui-effects-wrapper {display:inline;}  /*修正ui效果，避免斷行*/
+.ui-effects-transfer {border: 2px dotted gray;}
+
+#left_sidebar{float:left;width:48%;}
+#right_sidebar{float:right;width:50%;text-align:left;}
+#bigtitle, #smalltitle, #opennumber ,#lotterynumbers, #openarea{
+	text-align: center;
+	margin: 0 auto;
+	font-weight: bold;
+	border-radius:5px;
+	-moz-border-radius:5px; /* Firefox 3.6 and earlier */	
+	-khtml-border-radius:5px;　/* Safari */
+	-webkit-border-radius:5px;	/* Chrome Firefox*/
+}	
+#opennumber{
+	background: #FC0;
+	padding: 20px;
+	width: 250px;
+	height:250px;
+	font-size:200px;
+	color: #000;	
+	box-shadow: 7px 7px 7px #BABABA;	
+	border-radius:150px;
+	-moz-border-radius:150px; /* Firefox 3.6 and earlier */	
+	-khtml-border-radius:150px;
+	-webkit-border-radius:150px;	
+}
+#lotterynumbers{
+	/*background: #7EFFF1;*/
+	width:100%;
+	font-size:60px;
+	color:#000;
+	text-align:left;
+	/*overflow:auto;*/
+	word-wrap:break-word;	
+}
+
+#bigtitle{
+	background: #000;	
+	color: #FFF;	
+	font-size:36px;
+}
+
+#smalltitle{
+	text-align:left;
+	background: #FFF;	
+	color: #000;
+	font-size:20px;
+}
+
+#bigtitle, #smalltitle, #openarea ul{width:100%;}
+
+#lotterynumbers ul li{
+	text-align: center;
+	width:70px;
+	background: #008000;
+	color: #fff;
+	border:1px;
+	border-radius:40px;
+	box-shadow: 3px 3px 3px #BABABA;
+	-moz-border-radius:40px; /* Firefox 3.6 and earlier */	
+	-khtml-border-radius:40px;
+	-webkit-border-radius:40px;	
+}
+
+#clear{
+	font-size:12px;	
+}
+
+#random{
+	font-weight:bold;
+}
+
+#setting_area li{
+	width:100%;	
+	position:relative;
+	text-align:left;
+}
+
+
+/*另一種button style*/
+.a_demo_two {
+	background-color:#3bb3e0;
+	padding:8px;
+	position:relative;
+	font-family: 'Open Sans', sans-serif;
+	font-size:24px;
+	text-decoration:none;
+	color:#fff;
+	background-image: linear-gradient(bottom, rgb(44,160,202) 0%, rgb(62,184,229) 100%);
+	background-image: -o-linear-gradient(bottom, rgb(44,160,202) 0%, rgb(62,184,229) 100%);
+	background-image: -moz-linear-gradient(bottom, rgb(44,160,202) 0%, rgb(62,184,229) 100%);
+	background-image: -webkit-linear-gradient(bottom, rgb(44,160,202) 0%, rgb(62,184,229) 100%);
+	background-image: -ms-linear-gradient(bottom, rgb(44,160,202) 0%, rgb(62,184,229) 100%);
+	background-image: -webkit-gradient(
+	linear,
+	left bottom,
+	left top,
+	color-stop(0, rgb(44,160,202)),
+	color-stop(1, rgb(62,184,229))
+	);
+	-webkit-box-shadow: inset 0px 1px 0px #7fd2f1, 0px 6px 0px #156785;
+	-moz-box-shadow: inset 0px 1px 0px #7fd2f1, 0px 6px 0px #156785;
+	-o-box-shadow: inset 0px 1px 0px #7fd2f1, 0px 6px 0px #156785;
+	box-shadow: inset 0px 1px 0px #7fd2f1, 0px 6px 0px #156785;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.a_demo_two::before {
+	background-color:#072239;
+	content:"";
+	display:block;
+	position:absolute;
+	width:100%;
+	height:100%;
+	padding-left:2px;
+	padding-right:2px;
+	padding-bottom:4px;
+	left:-2px;
+	top:5px;
+	z-index:-1;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	-o-border-radius: 6px;
+	border-radius: 6px;
+	-webkit-box-shadow: 0px 1px 0px #fff;
+	-moz-box-shadow: 0px 1px 0px #fff;
+	-o-box-shadow: 0px 1px 0px #fff;
+	box-shadow: 0px 1px 0px #fff;
+}
+
+.a_demo_two:active {
+	color:#156785;
+	text-shadow: 0px 1px 1px rgba(255,255,255,0.3);
+	background:rgb(44,160,202);
+	-webkit-box-shadow: inset 0px 1px 0px #7fd2f1, inset 0px -1px 0px #156785;
+	-moz-box-shadow: inset 0px 1px 0px #7fd2f1, inset 0px -1px 0px #156785;
+	-o-box-shadow: inset 0px 1px 0px #7fd2f1, inset 0px -1px 0px #156785;
+	box-shadow: inset 0px 1px 0px #7fd2f1, inset 0px -1px 0px #156785;
+	top:7px;
+}
+
+.a_demo_two:active::before {
+	top:-2px;
+}
+
+</style>
+<script type="text/javascript">
+// ************************
+// Created by lindsay.hsieh @ 20130131
+// ************************
+var lotteryNum=[];　//已開過的數字
+var minNum;			//最大值
+var maxNum;			//最小值
+
+// 定義array.indexOf (For IE使用)
+if (!Array.prototype.indexOf) {
+  Array.prototype.indexOf = function (obj, fromIndex) {
+    if (fromIndex == null) {
+        fromIndex = 0;
+    } else if (fromIndex < 0) {
+        fromIndex = Math.max(0, this.length + fromIndex);
+    }
+    for (var i = fromIndex, j = this.length; i < j; i++) {
+        if (this[i] === obj)
+            return i;
+    }
+    return -1;
+  };
+}
+// 檢查Cookie是否已經開過獎
+function checkNum(){  
+	//getCookie
+	if(getCookie('lotterynum') != null){
+		if(getCookie('lotterynum') != ""){
+			if(getCookie('lotterynum').indexOf(",")){
+				lotteryNum=getCookie('lotterynum').split(",");
+			}else{
+				lotteryNum=getCookie('lotterynum');
+			}
+		}
+	}
+	maxNum=getCookie('maxnum');
+	minNum=getCookie('minnum');	
+	
+	if (lotteryNum!=null && lotteryNum!="" && maxNum!=null && maxNum!="" && minNum!=null && minNum!=""){
+	  	//alert('已開過獎，開獎紀錄:'+lotteryNum+'\n'+'範圍：'+minNum+'~'+maxNum+'');
+	  	document.getElementById('minnum').value = minNum;
+	  	document.getElementById('maxnum').value = maxNum;	  	
+	  	writeNumbers(lotteryNum);
+	  	if(maxNum!="" && minNum!=""){
+	  		document.getElementById('minnum').disabled = true;
+	  		document.getElementById('maxnum').disabled = true;
+	  	}
+	}
+}
+// 抽獎 - 檢查開獎範圍 -> 隨機選數字 ->寫入
+function pickNum(){
+	var x=0;	
+	var s=0;
+	var count=0;
+	
+	document.getElementById("random").disabled = true;
+	document.getElementById('minnum').disabled = true;
+  	document.getElementById('maxnum').disabled = true;
+
+	//檢查開獎範圍
+	if(minNum == null || maxNum == null || minNum == "" || maxNum == ""){
+		if(document.getElementById('minnum').value !=null && document.getElementById('maxnum').value !=null){
+			minNum = document.getElementById('minnum').value;
+			maxNum = document.getElementById('maxnum').value;
+			setCookie("minnum",minNum,14);
+			setCookie("maxnum",maxNum,14);
+		}else{
+			alert('請輸最小跟最大數字!');
+		}		
+	}
+	count = maxNum-minNum+1;//計算開獎數量
+	
+	// 隨機選取數字
+	if(minNum !=null && maxNum !=null){
+		if(lotteryNum.length < count){ //已開過的數字是否超過開獎數字
+			while(x==0){
+				x=Math.floor(Math.random()*count)+Number(minNum);
+				if(lotteryNum.length > 0){						
+					if(lotteryNum.indexOf(x.toString())>-1){
+						x=0;
+					}
+				}
+			}
+		}else{
+			alert("數字都開完啦!");
+		}
+
+		if(x!=0){
+			lotteryNum.push(x.toString());
+			//效果
+			$("#opennumber").hide("puff",{},10,hide_callback);			
+			//剛開出的號碼
+			setTimeout("writeOpneNumber("+x+");",300);
+			//寫入已經開過的區域
+			setTimeout("writeNumbers();",800);			
+		}
+	}
+	document.getElementById("random").disabled=false;
+}
+function clearNum(){// 清除開獎紀錄
+	setCookie('lotterynum','',1);
+	setCookie('maxnum','',1);
+	setCookie('minnum','',1);
+	document.getElementById("lotterynumbers").value ="";
+	alert("開獎紀錄已刪除");
+	window.location.href=window.location.href;
+}
+function writeOpneNumber(x){// 寫入剛開出的號碼的區域
+	document.getElementById("opennumber").innerHTML = x.toString();
+}
+function writeNumbers(){// 寫入已開過的區域
+	var str_num='';
+	for(i=0;i<lotteryNum.length;i++){
+		str_num = str_num + '<li>'+lotteryNum[i]+'</li>';
+	}
+	setCookie("lotterynum",lotteryNum.toString(),14);
+	document.getElementById("smalltitle").innerHTML = '已開過的數字如下，目前開了 <font color="red">'+lotteryNum.length+'</font> 個';
+	document.getElementById("lotterynumbers").innerHTML = '<ul>'+str_num+'</ul>';
+}
+
+// ========== Cookie相關設定 =============
+function setCookie(cname,list,expiredays){
+  	var exdate=new Date();
+  	exdate.setDate(exdate.getDate()+expiredays);
+  	document.cookie=cname+ "=" +escape(list)+((expiredays==null)? "" : ";expires="+exdate.toGMTString);
+}
+function getCookie(name) {
+    var arg = name + "=";   
+    var alen = arg.length;   
+    var clen = document.cookie.length;   
+    var i = 0;   
+    while (i < clen) {     
+    var j = i + alen;     
+    if (document.cookie.substring(i, j) == arg)       
+        return getCookieVal(j);     
+        i = document.cookie.indexOf(" ", i) + 1;     
+        if (i == 0) break;
+    }   
+    return null; 
+}
+function getCookieVal(offset) {
+	var endstr = document.cookie.indexOf (";", offset);   
+	if (endstr == -1) 
+	endstr = document.cookie.length;   
+	return unescape(document.cookie.substring(offset, endstr)); 
+}
+// ========== Cookie相關設定 End=============
+
+</script>
+<body onLoad="checkNum();">
+<div id="bigtitle" name="bigtitle">104 Bingo Bingo</div>
+<div id="openarea" name="openarea">
+	<ul style="height:360px;">
+		<li id="left_sidebar">
+			<ul>
+				<li style="height:360px">
+					<div name="opennumber" id="opennumber">0</div>
+				</li>
+				<li>
+					<div>
+						<ul id="setting_area" name="setting_area">					
+							<li style="text-align:center;">	
+								開獎範圍：
+								<input style="width:20px;" id="minnum" name="minnum" type="text" value="1">~
+								<input style="width:20px;" id="maxnum" name="maxnum" type="text" value="75">　
+								<a href="javascript:void(0)" class="a_demo_two" id="random" name="random" onClick="pickNum();">BINGO</a>　
+								<a href="javascript:void(0)" class="a_demo_two" id="clear" name="clear" onClick="clearNum();">清除開獎紀錄</a>
+							</li>							
+							<li>
+								<li>
+									<div id="copyright" name="copyright" style="position:relative;text-align:center;color:#7F7F7F">© lindsay.hsieh 謝小雨 2012 All rights reserved</div>
+								</li>
+								<ul style="font-size:12px;font-weight:normal;">
+									<li>使用規則：</li>
+									<li>．瀏覽器建議使用 Firefox, Chrome</li>
+									<li>．一次點一下開一個數字，點兩下會開個兩數字（廢話！）已開過的數字在正下方</li>
+									<li>．如需保留開獎紀錄，請開啟Cookie。（瀏覽器關閉重新開啟後，數字仍會保留）</li>
+									<li>．開始開獎後，數字會暫時鎖定；如需重新開獎，只要點選「清除開獎紀錄」即可。</li>
+								</ul>
+							</li>
+								
+						</ul>
+					</div>
+				</li>
+			</ul>
+		</li>
+		<li id="right_sidebar">
+			<div id="smalltitle" name="smalltitle">已開過的數字如下</div>
+			<div id="lotterynumbers" name="lotterynumbers"></div>			
+		</li>
+	</ul>
+</div>
+
+<script>
+function hide_callback() {
+	setTimeout(function() {
+		$( "#opennumber" ).removeAttr( "style" ).fadeIn();
+	}, 500 );
+};
+function show_callback() {
+	setTimeout(function() {
+		$( "#opennumber" ).removeAttr( "style" ).fadeOut();
+	}, 1000 );
+};
+// $("#random").click(function () {	
+// 	pickNum();
+// });
+</script>
+
+</body>
+</html>
